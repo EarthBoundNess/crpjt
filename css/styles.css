@@ -1,0 +1,19 @@
+.footer p {
+    display: block;
+    margin: 0;
+    padding: 14px 16px;
+    overflow: hidden;
+    text-align: center;
+    background-color: #333;
+}
+
+.footer a {
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: gray;
+}
