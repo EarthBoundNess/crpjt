@@ -101,3 +101,8 @@ iframe {
 hr {
     color: black;
 }
+
+#form {
+    display: block;
+    text-align: center;
+}
