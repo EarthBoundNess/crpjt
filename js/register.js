@@ -1,4 +1,4 @@
-document.getElementById("registerSubmit").addEventListener("click", function(event) {
+$("#registerSubmit").click(function (event) {
     event.preventDefault();
     var user = document.getElementById("usernameInput").value;
     var pass = document.getElementById("passwordInput").value;
@@ -21,18 +21,39 @@ document.getElementById("registerSubmit").addEventListener("click", function(eve
         return;
     }
     if (pass != pass2) {
+        console.log(pass2);
+        document.getElementById("message").innerHTML = "<p>Passwords do not match.</p>";
         return;
     }
     
-    console.log(user + " " + pass + " " + email + " " + date + " " + gender);
+    const uri = "https://api.myjson.com/bins/toy3y";
     
-    const url = "https://api.myjson.com/bins/ouzoq";
-    fetch(url).then(function(response) { return response.json(); }).then(function(json) {
-        console.log(json);
-    })
+    var dataObj = {
+        "user1": {
+            "username": user,
+            "data": {
+                "password": pass,
+                "email": email,
+                "dob": date,
+                "gender": gender,
+                "desc": "I am a new Blockmania user!",
+                "status": "Playin' games~"
+            }
+        }
+    };
     
-    fetch(url, {
-        method: 'post',
-        body: '"user":{"' + user + '":{,"password":"' + pass + '","email":"' + email + '","dob":"' + date + '","gender":"' + gender + '","desc":"","status":""}}'
-    })
+    $.ajax({
+        url: uri,
+        type: "PUT",
+        data: JSON.stringify(dataObj),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (data, textStatus, jqXHR) {
+            var json = JSON.stringify(data);
+            console.log(json);
+            
+            document.getElementById("message").innerHTML = "<p>Welcome, " + user + "</p>";
+            document.cookie = "json" + "=" + json + ";path=/";
+        }
+    });
 })

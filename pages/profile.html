@@ -8,7 +8,7 @@
   <title>Profile</title>
 </head>
 
-<body>
+<body onload="loadProfile()">
   <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #376983;">
     <a class="navbar-brand" href="..">Blockmania</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,20 +30,24 @@
     </div>
   </nav>
   
+  <div id="status"></div>
+  
   <div class= "extraspace"><p> </p></div>
   
   <div class="container">
-    <h1>Player1</h1>
+    <div id="username"><h1>null</h1></div>
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4">
           <div class="squareimg"><img src="../images/noob.png"></div>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-4">
-          <div class="desc"><p>I am a new Blockmania player!</p></div>
+          <div class="desc"><div id="desc"><p>.</p></div></div>
         </div>
         </div>
       </div>
     </div>
+    
+  <div id="info"></div>  
   
   <div class= "extraspace"><p> </p></div>
   
@@ -53,6 +57,10 @@
       <p><a href="https://github.com/EarthBoundNess/crpjt">GitHub repo</a></p>
     </footer>
   </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+    <script text="type/javascript" src="../js/load.js">
+  </script>
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
