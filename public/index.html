@@ -51,7 +51,18 @@
         <div class="disclaimer"><p>*This website is not affiliated with Roblox. This is only a mockup site.</p></div>
       </div>
       <div class="col-sm-12 col-md-4">
-        <p>login thing</p>
+        <form v-on:submit.prevent="login" v-if="!loggedIn">
+          <label>Log In</label><br>
+          <label>Username: </label>
+          <input id="username" v-model="usernameInput" type="username"></input><br>
+          <label>Password: </label>
+          <input id="password" v-model="passwordInput" type="password"></input><br>
+          <button type="submit">Log In</button>
+          <div class="disclaimer"><p>*Don't use one of your real passwords or other personal info. This website is NOT secure.</p></div>
+          <p> </p><br>
+        </form>
+        <p>{{message}}</p>
+        <p v-if="!loggedIn"><a href="register">Don't have an account?</a></p>
       </div>
     </div>
   </div> 

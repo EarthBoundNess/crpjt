@@ -38,18 +38,18 @@
     </div>
   </nav>
   
-  
-  <p>{{message}}</p>
-  
   <div class= "extraspace"><p> </p></div>
   
     <form v-on:submit.prevent="login">
       <label>Log In</label><br>
       <label>Username: </label>
-      <input v-model="usernameInput" type="username"></input><br>
+      <input id="username" v-model="usernameInput" type="username"></input><br>
       <label>Password: </label>
-      <input v-model="passwordInput" type="password"></input><br>
+      <input id="password" v-model="passwordInput" type="password"></input><br>
       <button type="submit">Log In</button>
+      <div class="disclaimer"><p>*Don't use one of your real passwords or other personal info. This website is NOT secure.</p></div>
+      <p> </p><br>
+      <p>{{message}}</p>
     </form>
     
     

@@ -49,6 +49,7 @@ let app = new Vue({
   },
   methods: {
     loadPage() {
+      this.loadForum();
       var cookie = this.getCookie("userID");
       if (cookie != "" && Number(cookie) !== -1) {
         this.userID = Number(cookie);
@@ -62,15 +63,12 @@ let app = new Vue({
       }
       try {
         this.currentUser = "Loading...";
-        var url = "/loadreq";
+        var url = "/getusername?q="+this.userID;
         $.getJSON(url,function(data) {
           return data;
         })
           .then((response) => {
-             this.storage = response;
-             
-             this.account = this.storage.accounts[this.userID];
-             this.currentUser = this.account.username;
+             this.currentUser = response.username;
           
              if (this.otherUserID !== -1) {
                 this.ownProfile = false;
@@ -86,7 +84,7 @@ let app = new Vue({
         console.log(error);
       }
     },
-    async register() {
+    register() {
       if (this.usernameInput == "" || this.passwordInput == "" || this.emailInput == "" || this.dateInput == "") {
           return;
       }
@@ -95,61 +93,49 @@ let app = new Vue({
           return;
       }
       if (this.gendermale) {
-          this.account.data.gender = "male";
+          this.gender = "male";
       }
       else if (this.genderfemale) {
-          this.account.data.gender = "female";
+          this.gender = "female";
       }
       else {
           return;
       }
       
-      this.account.username = this.usernameInput;
-      this.account.data.password = this.passwordInput;
-      this.account.data.email = this.emailInput;
-      this.account.data.dob = this.dateInput;
-      this.account.data.desc = "I am a new Blockmania user!";
-      this.account.data.status = "Playin' games~";
+      var body = {
+        "username":this.usernameInput,
+        "password": this.passwordInput,
+        "email":this.emailInput,
+        "dob":this.dateInput,
+        "gender": this.gender
+      };
       
       try {
-        const response = await axios.get('https://jsonbin.org/earthboundness', {
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
-        });
-        
-        this.storage = response.data;
-        this.storage.accounts = Object.keys(response.data.accounts).map((key) => {
-            return response.data.accounts[key];
-        });
-        
-        this.userID = this.storage.accounts.length;
-        this.otherUsername = this.account.username;
-        this.storage.accounts.forEach(this.checkUsername);
-        if (this.badRegister) {
-            this.message = "That username is already in use.";
-            return;
-        }
-        
-        this.storage.accounts.push(this.account);
-        
         this.message = "Registering...";
-        axios({
-          method: 'post',
-          url: 'https://jsonbin.org/earthboundness',
-          data: this.storage,
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
+        var url = "/registerreq";
+        $.post(url,body,function(data) {
+          return data;
+        })
+          .then((response) => {
+            if (response !== null) {
+              this.message = "Logging in...";
+              this.userID = response.id;
+              this.currentUser = this.usernameInput;
+              
+              document.cookie = "userID" + "=" + this.userID + ";path=/";
+              this.usernameInput = "";
+              this.passwordInput = "";
+              this.emailInput = "";
+              this.dateInput = "";
+              this.gendermale = false;
+              this.genderfemale = false;
+              this.message = "Welcome, " + this.currentUser + "!";
+              this.loggedIn = true;
+            }
+            else {
+              this.message = "That username is already in use.";
+            }
         });
-        
-        this.message = "Logging in...";
-        document.cookie = "userID" + "=" + this.userID + ";path=/";
-        this.usernameInput = "";
-        this.passwordInput = "";
-        this.emailInput = "";
-        this.dateInput = "";
-        this.gendermale = false;
-        this.genderfemale = false;
-        this.message = "Welcome, " + this.account.username + "!";
-        this.currentUser = this.account.username;
-        this.loggedIn = true;
       } catch (error) {
         console.log(error);
       }
@@ -160,35 +146,37 @@ let app = new Vue({
       }
       try {
         this.message = "Logging in...";
-        var url = "/loadreq";
+        var url = "/loginreq";
+        $.post(url,{"username":this.usernameInput,"password":this.passwordInput},function(data) {
+          return data;
+        })
+          .then((response) => {
+            if (response !== null) {
+              this.userID = response.id;
+              this.currentUser = this.usernameInput;
+              
+              document.cookie = "userID" + "=" + this.userID + ";path=/";
+              this.usernameInput = "";
+              this.passwordInput = "";
+              this.message = "Welcome, " + this.currentUser + "!";
+              this.loggedIn = true;
+            }
+            else {
+              this.message = "Incorrect username or password.";
+            }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    loadForum() {
+      try {
+        var url = "/thread";
         $.getJSON(url,function(data) {
           return data;
         })
           .then((response) => {
-          this.storage = response;
-          
-          this.otherUsername = this.usernameInput;
-          this.storage.accounts.forEach(this.checkUsername);
-          if (this.foundID !== -1) {
-            this.userID = this.foundID;
-            this.foundID = -1;
-          }
-          else {
-              this.message = "Incorrect username or password.";
-              return;
-          }
-          
-          if (!(this.strcmp(this.storage.accounts[this.userID].data.password,this.passwordInput))) {
-              this.message = "Incorrect username or password.";
-              return;
-          }
-          this.account = this.storage.accounts[this.userID];
-          document.cookie = "userID" + "=" + this.userID + ";path=/";
-          this.usernameInput = "";
-          this.passwordInput = "";
-          this.message = "Welcome, " + this.account.username + "!";
-          this.currentUser = this.account.username;
-          this.loggedIn = true;
+             this.posts = response;
         });
       } catch (error) {
         console.log(error);
@@ -199,23 +187,21 @@ let app = new Vue({
         this.status = "Loading...";
         this.user = "";
         this.desc = "";
-        var url = "/loadreq";
+        var url = "/user?q="+this.userID+","+id;
         $.getJSON(url,function(data) {
           return data;
         })
           .then((response) => {
-          this.storage = response;
-          this.posts = this.storage.posts;
+          this.max = response.max;
           
-          this.max = this.storage.accounts.length - 1;
-          this.viewingAccount = this.storage.accounts[id];
-          
-          this.status = this.viewingAccount.data.status;
-          this.user = this.viewingAccount.username;
-          this.desc = this.viewingAccount.data.desc;
-          this.email = this.viewingAccount.data.email;
-          this.dob = this.viewingAccount.data.dob;
-          this.gender = this.viewingAccount.data.gender;
+          this.status = response.status;
+          this.user = response.username;
+          this.desc = response.desc;
+          if (response.email !== null) {
+            this.email = response.email;
+            this.dob = response.dob;
+            this.gender = response.gender;
+          }
         });
       } catch (error) {
         console.log(error);
@@ -240,70 +226,63 @@ let app = new Vue({
       this.showDesc = true;
     },
     updateStatus() {
-      this.status = this.statusInput;
+      var body = {
+        "id": this.userID,
+        "status": this.statusInput
+      };
+      
       try {
-        var url = "/loadreq";
-        $.getJSON(url,function(data) {
+        var url = "/statusreq";
+        $.post(url,body,function(data) {
           return data;
         })
           .then((response) => {
-        
-          this.storage = response;
-          this.storage.accounts[this.userID].data.status = this.status;
+            if (response) {
+              this.status = this.statusInput;
+              this.statusInput = "";
+              this.showStatus = false;
+            }
         });
-        
-        /*axios({
-          method: 'post',
-          url: 'https://jsonbin.org/earthboundness',
-          data: this.storage,
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
-        });*/
       } catch (error) {
         console.log(error);
       }
-      
-      this.statusInput = "";
-      this.showStatus = false;
     },
     updateDesc() {
-      this.desc = this.descInput;
+      var body = {
+        "id": this.userID,
+        "desc": this.descInput
+      };
+      
       try {
-        var url = "/loadreq";
+        var url = "/descreq";
+        $.post(url,body,function(data) {
+          return data;
+        })
+          .then((response) => {
+            if (response) {
+              this.desc = this.descInput;
+              this.descInput = "";
+              this.showDesc = false;
+            }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    searchUser() {
+      try {
+        var url = "/getid?q="+this.userInput;
         $.getJSON(url,function(data) {
           return data;
         })
           .then((response) => {
-        
-          this.storage = response;
-          this.storage.accounts[this.userID].data.desc = this.desc;
+            if (response !== null) {
+              this.otherUserID = response.id;
+              this.loadProfile(response.id);
+            }
         });
-  
-        /*axios({
-          method: 'post',
-          url: 'https://jsonbin.org/earthboundness',
-          data: this.storage,
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
-        });*/
       } catch (error) {
         console.log(error);
-      }
-      
-      this.descInput = "";
-      this.showDesc = false;
-    },
-    searchUser() {
-      this.otherUsername = this.userInput;
-      this.storage.accounts.forEach(this.checkUsername);
-      if (this.foundID !== -1) {
-        this.otherUserID = this.foundID;
-        this.foundID = -1;
-        if (this.otherUserID !== this.userID) {
-          this.ownProfile = false;
-        }
-        else {
-          this.ownProfile = true;
-        }
-        this.loadProfile(this.otherUserID);
       }
     },
     prevUser() {
@@ -357,71 +336,63 @@ let app = new Vue({
       this.showList = true;
     },
     addPost() {
+      this.loadForum();
+      
+      this.posts.push({
+        title: this.addedTitle,
+        author: this.currentUser,
+        date: moment().format("h:mm a MMM D YYYY"),
+        post: this.addedPost,
+        comments: []
+      });
+      
+      var body = {"posts":JSON.stringify(this.posts)};
+      
       try {
-        var url = "/loadreq";
-        $.getJSON(url,function(data) {
+        var url = "/postreq";
+        $.post(url,body,function(data) {
           return data;
         })
           .then((response) => {
-        
-          this.storage = response.data;
-          this.posts = this.storage.posts;
-          
-          this.posts.push({
-            title: this.addedTitle,
-            author: this.account.username,
-            date: moment().format("h:mm a MMM D YYYY"),
-            post: this.addedPost,
-            comments: []
-          });
-          this.addedTitle = "";
-          this.addedPost = "";
-          
-          this.storage.posts = this.posts;
+            if (response) {
+              this.addedTitle = "";
+              this.addedPost = "";
+            }
         });
-  
-        /*axios({
-          method: 'post',
-          url: 'https://jsonbin.org/earthboundness',
-          data: this.storage,
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
-        });*/
       } catch (error) {
         console.log(error);
       }
+      
+      this.loadForum();
     },
     addComment() {
+      this.loadForum();
+      
+      this.comments = this.posts[this.postID].comments;
+      this.comments.push({
+        author: this.currentUser,
+        date: moment().format("h:mm a MMM D YYYY"),
+        text: this.addedComment
+      });
+      this.posts[this.postID].comments = this.comments;
+      
+      var body = {"posts":JSON.stringify(this.posts)};
+      
       try {
-        var url = "/loadreq";
-        $.getJSON(url,function(data) {
+        var url = "/postreq";
+        $.post(url,body,function(data) {
           return data;
         })
           .then((response) => {
-        
-          this.storage = response.data;
-          this.posts = this.storage.posts;
-          
-          this.comments = this.posts[this.postID].comments;
-          this.comments.push({
-            author: this.account.username,
-            date: moment().format("h:mm a MMM D YYYY"),
-            text: this.addedComment
-          });
-          this.posts[this.postID].comments = this.comments;
-          this.addedComment = "";
-          
-          this.storage.posts = this.posts;
+            if (response) {
+              this.addedComment = "";
+            }
         });
-  
-        /*axios({
-          method: 'post',
-          url: 'https://jsonbin.org/earthboundness',
-          data: this.storage,
-          headers: { "authorization": "token e72374e4-a2cf-4d55-9c67-225e1b1317fe" }
-        });*/
       } catch (error) {
         console.log(error);
       }
+      
+      this.loadForum();
     },
     getCookie(cname) {
       var name = cname + "=";
