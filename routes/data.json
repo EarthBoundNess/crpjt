@@ -1,0 +1,144 @@
+{
+  "accounts": [
+    {
+      "data": {
+        "gender": "male",
+        "password": "asdf",
+        "email": "fun@hotmail.com",
+        "dob": "2019-10-22",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "builderman"
+    },
+    {
+      "data": {
+        "gender": "female",
+        "password": "aaa",
+        "email": "aaa@yahoo.com",
+        "dob": "2019-09-29",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "player7"
+    },
+    {
+      "data": {
+        "gender": "male",
+        "password": "zxc",
+        "email": "blockmania@gmail.com",
+        "dob": "2019-10-08",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "blockmania"
+    },
+    {
+      "data": {
+        "gender": "male",
+        "password": "b",
+        "email": "b@ba",
+        "dob": "2019-10-01",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "bob"
+    },
+    {
+      "data": {
+        "gender": "male",
+        "password": "aaa",
+        "email": "a@a",
+        "dob": "2019-10-02",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "asdfman"
+    },
+    {
+      "username": "qwerty",
+      "data": {
+        "gender": "female",
+        "password": "bbb",
+        "email": "b@b",
+        "dob": "2019-10-02",
+        "desc": "hello there",
+        "status": "qwertyasdf"
+      }
+    },
+    {
+      "data": {
+        "gender": "female",
+        "password": "asasas",
+        "email": "a@aaasd.com",
+        "dob": "2019-09-30",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "anotherplayer"
+    },
+    {
+      "data": {
+        "gender": "male",
+        "password": "k",
+        "email": "k@k",
+        "dob": "1111-11-11",
+        "desc": "I am a new Blockmania user!",
+        "status": "Playin' games~"
+      },
+      "username": "k"
+    }
+  ],
+  "posts": [
+    {
+      "title": "Blockmania is the best",
+      "author": "qwerty",
+      "date": "5:37 am Oct 26 2019",
+      "post": "yes",
+      "comments": [
+        {
+          "author": "qwerty",
+          "date": "5:38 am Oct 26 2019",
+          "text": "hi"
+        },
+        {
+          "author": "builderman",
+          "date": "5:40 am Oct 26 2019",
+          "text": "hi"
+        }
+      ]
+    },
+    {
+      "title": "dab",
+      "author": "qwerty",
+      "date": "5:38 am Oct 26 2019",
+      "post": "dab",
+      "comments": [
+        {
+          "author": "qwerty",
+          "date": "5:38 am Oct 26 2019",
+          "text": "a"
+        },
+        {
+          "author": "builderman",
+          "date": "5:40 am Oct 26 2019",
+          "text": "no"
+        }
+      ]
+    },
+    {
+      "title": "we need more gamed",
+      "author": "builderman",
+      "date": "5:40 am Oct 26 2019",
+      "post": "title",
+      "comments": []
+    },
+    {
+      "title": "first 10 posts are cool blockmanians",
+      "author": "builderman",
+      "date": "5:40 am Oct 26 2019",
+      "post": "",
+      "comments": []
+    }
+  ]
+}
