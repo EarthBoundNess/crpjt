@@ -1,16 +1,30 @@
 {
   "name": "crpjt",
-  "version": "0.0.0",
-  "private": true,
+  "version": "5.0.0",
+  "description": "Blockmania",
+  "main": "server/https-server.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "test",
+    "start": "node https-server.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EarthBoundNess/crpjt.git"
+  },
+  "keywords": [
+    "blockmania"
+  ],
+  "author": "Ben",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EarthBoundNess/crpjt/issues"
+  },
+  "homepage": "https://github.com/EarthBoundNess/crpjt#readme",
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
-  }
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.0",
+    "morgan": "^1.9.1",
+    "serve-favicon": "^2.5.0"
+  },
+  "devDependencies": {}
 }

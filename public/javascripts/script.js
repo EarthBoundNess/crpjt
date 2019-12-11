@@ -63,7 +63,7 @@ let app = new Vue({
       }
       try {
         this.currentUser = "Loading...";
-        var url = "/getusername?q="+this.userID;
+        var url = "/users/getusername?q="+this.userID;
         $.getJSON(url,function(data) {
           return data;
         })
@@ -86,6 +86,7 @@ let app = new Vue({
     },
     register() {
       if (this.usernameInput == "" || this.passwordInput == "" || this.emailInput == "" || this.dateInput == "") {
+          this.message = "Please fill all fields.";
           return;
       }
       if (this.passwordInput != this.passwordInputConfirm) {
@@ -99,6 +100,7 @@ let app = new Vue({
           this.gender = "female";
       }
       else {
+          this.message = "Please fill all fields.";
           return;
       }
       
@@ -112,7 +114,7 @@ let app = new Vue({
       
       try {
         this.message = "Registering...";
-        var url = "/registerreq";
+        var url = "/users";
         $.post(url,body,function(data) {
           return data;
         })
@@ -146,7 +148,7 @@ let app = new Vue({
       }
       try {
         this.message = "Logging in...";
-        var url = "/loginreq";
+        var url = "/users/login";
         $.post(url,{"username":this.usernameInput,"password":this.passwordInput},function(data) {
           return data;
         })
@@ -187,7 +189,7 @@ let app = new Vue({
         this.status = "Loading...";
         this.user = "";
         this.desc = "";
-        var url = "/user?q="+this.userID+","+id;
+        var url = "/users/getuser?q="+this.userID+","+id;
         $.getJSON(url,function(data) {
           return data;
         })
@@ -202,6 +204,16 @@ let app = new Vue({
             this.dob = response.dob;
             this.gender = response.gender;
           }
+          
+          /*$.post("/users",{
+            username: response.username,
+            password: response.password,
+            gender: response.gender,
+            email: response.email,
+            dob: response.dob
+          },function(data) {
+              return data;
+          })*/
         });
       } catch (error) {
         console.log(error);
@@ -232,7 +244,7 @@ let app = new Vue({
       };
       
       try {
-        var url = "/statusreq";
+        var url = "/users/statusreq";
         $.post(url,body,function(data) {
           return data;
         })
@@ -254,7 +266,7 @@ let app = new Vue({
       };
       
       try {
-        var url = "/descreq";
+        var url = "/users/descreq";
         $.post(url,body,function(data) {
           return data;
         })
@@ -271,7 +283,7 @@ let app = new Vue({
     },
     searchUser() {
       try {
-        var url = "/getid?q="+this.userInput;
+        var url = "/users/getid?q="+this.userInput;
         $.getJSON(url,function(data) {
           return data;
         })
@@ -322,6 +334,15 @@ let app = new Vue({
       this.ownProfile = false;
       
       document.cookie = "userID" + "=" + this.userID + ";path=/";
+      
+      /*try {
+        var url = "/users";
+        $.delete(url,function(data) {
+          return data;
+        })
+      } catch (error) {
+        console.log(error);
+      }*/
     },
     openPost(post, index) {
       this.showList = false;
